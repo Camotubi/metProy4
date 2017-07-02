@@ -9,6 +9,7 @@ import camo_calc.Calculator;
 import camo_calc.Function;
 import methods.Euler;
 //import methods
+import methods.Kutta;
 
 public class Main
 { 
@@ -24,7 +25,7 @@ public class Main
 			Function f = new Function(in);
 			Euler e = new Euler();
 			e.setDydx(f);
-			Double arr[][] = e.solve(new Double[]{2.0,7.0}, 0.001, 3);
+			Double arr[][] = e.solve(new Double[]{2.0,7.0}, 0.1, 3);
 					for (int i = 0; i < arr.length; i++) {
 					    for (int j = 0; j < arr[i].length; j++) {
 					        System.out.print(arr[i][j] + " ");
