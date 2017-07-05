@@ -1,12 +1,8 @@
 package gui;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-
-import camo_calc.Calculator;
 import camo_calc.Function;
 import methods.Euler;
 //import methods
@@ -16,32 +12,13 @@ public class Main
 { 
 	private static final String INSERT_DIFF_EQN_MSG = "Inserte la ecuacion Diferencial:";
 	private static final String INPUT_ERROR_MSG = "Hubo un problema con el input, porfavor pruebe de nuevo.";
+	private static final String[] EULER_COLNAMES = {"Iter","x0","y0","dydx"};
+	private static final String[] KUTTA_COLNAMES = {"Iter","x0","y0","K","K1","K2","K3","K4"};
 	public static void main(String args[]) {
 	
 		
 		MenuPrincipal();
-		
 
-		BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
-		try
-		{
-			String in= JOptionPane.showInputDialog(null,INSERT_DIFF_EQN_MSG);
-			Function f = new Function(in);
-			Euler e = new Euler();
-			e.setDydx(f);
-			Double arr[][] = e.solve(new Double[]{2.0,7.0}, 0.1, 3);
-					for (int i = 0; i < arr.length; i++) {
-					    for (int j = 0; j < arr[i].length; j++) {
-					        System.out.print(arr[i][j] + " ");
-					    }
-					    System.out.println();
-					}
-		}
-		catch( Exception e )
-		{
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,INPUT_ERROR_MSG);
-		}
 	}
 	
 	
@@ -51,7 +28,7 @@ public class Main
 		do{
 			opcion=0;
 			try{
-				opcion=Integer.parseInt(JOptionPane.showInputDialog(null, "1.Pagina de presentación.\n"
+				opcion=Integer.parseInt(JOptionPane.showInputDialog(null, "1.Pagina de presentaciï¿½n.\n"
 						+ "2. Metodo Euler. \n"
 						+ "3. Metodo Runge-Kutta. \n "
 						+ "4. Salir del Programa." ));
@@ -71,68 +48,63 @@ public class Main
 		}while(opcion!=4);
 	}
 	
-	static void input(){
+	static String input( String msg){
 		String ecuacion;
-		double x0,y0,h;
+		
 		boolean error = false;
 		
 		do
 		{
-		
-		try 
-		{
-		ecuacion=JOptionPane.showInputDialog(null, "Ingrese la ecuación diferencial de primer orden.");
-		error=false;
-		}
-		catch(Exception e)
-		{ //No se como se va introducir esa ecuación o.o i mean, si tiene mas de una variable
-		JOptionPane.showMessageDialog(null, "Error en el formato");
-		error=true;
-		}
-		
-		try 
-		{	
-		x0=Double.parseDouble(JOptionPane.showInputDialog(null, "Ingrese el valor de x0"));
-		error=false;
-		}
-		catch(Exception e){ 
-		JOptionPane.showMessageDialog(null, "Error, no introdujo un numero");
-		error=true;
-		}
-		
-		
-		try
-		{
-		y0=Double.parseDouble(JOptionPane.showInputDialog(null, "Ingrese el valor de y0"));
-		error=false;
-		}
-		catch(Exception e)
-		{ 
-		JOptionPane.showMessageDialog(null, "Error, no introdujo un numero");
-		error=true;
-		}
-		
-		try
-		{
-		h=Double.parseDouble(JOptionPane.showInputDialog(null, "Ingrese el valor de h"));
-		error=false;
-		}
-		catch(Exception e)
-		{ 
-		JOptionPane.showMessageDialog(null, "Error, no introdujo un numero");
-		error=true;
-		}
-		
-		}while(error==true);
+			try
+			{
+				return(JOptionPane.showInputDialog(null, msg));
+			}
+			catch(Exception e)
+			{ //No se como se va introducir esa ecuaciï¿½n o.o i mean, si tiene mas de una variable
+				JOptionPane.showMessageDialog(null, "Hubo un problema en el input, intentelo denuevo");
+				error=true;
+			}
+			
+		}while(error);
+		return("");
 }
 	
 	static void MetodoRungeKutta(){
-		input();
+		String ecuacion;
+		double x0,xf,y0,h;
+		ecuacion=input("Inserte la ecuacion Diferencial");
+		x0=Double.parseDouble(input("Inserte el x0:"));
+		y0=Double.parseDouble(input("Inserte el y0:"));
+		h=Double.parseDouble(input("Inserte el h:"));
+		xf=Double.parseDouble(input("Inserte la x final:"));
+		Kutta kutta= new Kutta();
+		kutta.setDydx(new Function(ecuacion));
+
+		try {
+			new matrixResult(kutta.solve(new Double[] {x0, y0},h, xf),KUTTA_COLNAMES).showme();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Hubo un problema con el metodo");
+			e.printStackTrace();
+		}
 		
 	}
 	
 	static void MetodoEuler(){
-		input();
+		String ecuacion;
+		double x0,xf,y0,h;
+		ecuacion=input("Inserte la ecuacion Diferencial");
+		x0=Double.parseDouble(input("Inserte el x0:"));
+		y0=Double.parseDouble(input("Inserte el y0:"));
+		h=Double.parseDouble(input("Inserte el h:"));
+		xf=Double.parseDouble(input("Inserte la x final:"));
+		Euler euler = new Euler();
+		euler.setDydx(new Function(ecuacion));
+		try {
+			new matrixResult(euler.solve(new Double[] {x0, y0},h, xf),EULER_COLNAMES).showme();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Hubo un problema con el metodo");
+			e.printStackTrace();
+		}
 	}
 	
 	static void PaginaDePresentacion(){

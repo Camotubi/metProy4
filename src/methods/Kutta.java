@@ -34,25 +34,28 @@ public class Kutta {
 			{
 				if(getDydx().getVars().get(0)=='y')
 				{
+					
 					vals = new Double[] {yN};
 					k1N= getDydx().evaluate(vals);
-					vals = new Double[] {yN*k1N*h/2};
+
+					vals = new Double[] {yN+(h/2)*k1N};
 					k2N= getDydx().evaluate(vals);
-					vals = new Double[] {yN};
+
+					vals = new Double[] {yN+(h/2)*k2N};
 					k3N= getDydx().evaluate(vals);
-					vals = new Double[] {yN};
+
+					vals = new Double[] {yN+h*k3N};
 					k4N= getDydx().evaluate(vals);
 				}
 				else
 				{
 					vals = new Double[] {xN};
-					vals = new Double[] {yN};
 					k1N= getDydx().evaluate(vals);
-					vals = new Double[] {yN};
+					vals = new Double[] {xN+(h/2)};
 					k2N= getDydx().evaluate(vals);
-					vals = new Double[] {yN};
+					vals = new Double[] {xN+(h/2)};
 					k3N= getDydx().evaluate(vals);
-					vals = new Double[] {yN};
+					vals = new Double[] {xN+h};
 					k4N= getDydx().evaluate(vals);
 				}
 			}
@@ -60,14 +63,19 @@ public class Kutta {
 			{
 				if(getDydx().getVars().get(0)=='y')
 				{
+
 					vals = new Double[] {yN,xN};
 					k1N= getDydx().evaluate(vals);
+
 					vals = new Double[] {yN+(h/2)*k1N,xN+(h/2)};
 					k2N= getDydx().evaluate(vals);
+
 					vals = new Double[] {yN+(h/2)*k2N,xN+(h/2)};
 					k3N= getDydx().evaluate(vals);
+
 					vals = new Double[] {yN+h*k3N,xN+h};
 					k4N= getDydx().evaluate(vals);
+
 				}
 				else
 				{
@@ -95,12 +103,13 @@ public class Kutta {
 			
 			while(xN<xMax)
 			{
-				System.out.println(n);
-				n++;
+				
+				
 				yN= yN+kN;
 				xN= xN + h;
 				if(getDydx().getVars().size()==1)
 				{
+					
 					if(getDydx().getVars().get(0)=='y')
 					{
 						vals = new Double[] {yN};
@@ -131,11 +140,14 @@ public class Kutta {
 					{
 						vals = new Double[] {yN,xN};
 						k1N= getDydx().evaluate(vals);
-						vals = new Double[] {yN};
+
+						vals = new Double[] {yN+(h/2)*k1N,xN+(h/2)};
 						k2N= getDydx().evaluate(vals);
-						vals = new Double[] {yN};
+
+						vals = new Double[] {yN+(h/2)*k2N,xN+(h/2)};
 						k3N= getDydx().evaluate(vals);
-						vals = new Double[] {yN};
+
+						vals = new Double[] {yN+h*k3N,xN+h};
 						k4N= getDydx().evaluate(vals);
 					}
 					else
@@ -159,13 +171,18 @@ public class Kutta {
 				ys.add(yN);
 				xs.add(xN);
 			}
-			Double outputMatrix[][] = new Double[ys.size()][4];
+			Double outputMatrix[][] = new Double[ys.size()][8];
 			for(int r = 0 ; r < ys.size();r++ )
 			{
 				outputMatrix[r][0]=r+0.0;
 				outputMatrix[r][1]=xs.get(r);
 				outputMatrix[r][2]=ys.get(r);
 				outputMatrix[r][3]=ks.get(r);
+				outputMatrix[r][4]=k1s.get(r);
+				outputMatrix[r][5]=k2s.get(r);
+				outputMatrix[r][6]=k3s.get(r);
+				outputMatrix[r][7]=k4s.get(r);
+				
 			}
 			return outputMatrix;
 		}
