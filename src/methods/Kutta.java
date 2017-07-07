@@ -1,19 +1,21 @@
 
 package methods;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import camo_calc.Function;
 
 public class Kutta {
 
+	private DecimalFormat df = new DecimalFormat("#.#####");
 
 		private double y0;
 		private double x0;
 		private double h=0.1;
 		private Function dydx;
 		
-		public Double[][] solve( Double[] initial,double h, double xMax) throws Exception
+		public String[][] solve( Double[] initial,double h, double xMax) throws Exception
 		{
 			ArrayList<Double> ks = new ArrayList<Double>();
 			ArrayList<Double> ys = new ArrayList<Double>();
@@ -171,17 +173,17 @@ public class Kutta {
 				ys.add(yN);
 				xs.add(xN);
 			}
-			Double outputMatrix[][] = new Double[ys.size()][8];
+			String outputMatrix[][] = new String[ys.size()][8];
 			for(int r = 0 ; r < ys.size();r++ )
 			{
-				outputMatrix[r][0]=r+0.0;
-				outputMatrix[r][1]=xs.get(r);
-				outputMatrix[r][2]=ys.get(r);
-				outputMatrix[r][3]=ks.get(r);
-				outputMatrix[r][4]=k1s.get(r);
-				outputMatrix[r][5]=k2s.get(r);
-				outputMatrix[r][6]=k3s.get(r);
-				outputMatrix[r][7]=k4s.get(r);
+				outputMatrix[r][0]=df.format( r+0.0);
+				outputMatrix[r][1]=df.format( xs.get(r));
+				outputMatrix[r][2]=df.format( ys.get(r));
+				outputMatrix[r][3]=df.format( ks.get(r));
+				outputMatrix[r][4]=df.format( k1s.get(r));
+				outputMatrix[r][5]=df.format( k2s.get(r));
+				outputMatrix[r][6]=df.format( k3s.get(r));
+				outputMatrix[r][7]=df.format( k4s.get(r));
 				
 			}
 			return outputMatrix;

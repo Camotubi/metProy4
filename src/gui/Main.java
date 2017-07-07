@@ -1,6 +1,8 @@
 package gui;
 
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import camo_calc.Function;
@@ -108,7 +110,10 @@ public class Main
 	}
 	
 	static void PaginaDePresentacion(){
-		ImageIcon presentacion = new ImageIcon(Main.class.getClassLoader().getResource("presentacion.jpg"));
+
+		ImageIcon presentacion = new ImageIcon(
+				new ImageIcon(
+						Main.class.getClassLoader().getResource("presentacion.jpg")).getImage().getScaledInstance(450,650, Image.SCALE_DEFAULT));
 		JOptionPane.showMessageDialog(null, presentacion);
 	}
 	
